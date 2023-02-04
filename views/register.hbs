@@ -1,0 +1,60 @@
+{{>header}}
+
+<style>
+    .divider:after,
+    .divider:before {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #eee;
+    }
+</style>
+
+<section class="vh-100 mt-1">
+    <div class="container py-5 h-100">
+        <div class="row d-flex align-items-center justify-content-center h-100">
+            <div class="col-md-8 col-lg-7 col-xl-6">
+                <img height="400px" width="400px" src="https://imageio.forbes.com/specials-images/imageserve/5f85be4ed0acaafe77436710/Stack-books-isolated-3d-rendering/960x0.jpg?format=jpg&width=960"
+                    class="img-fluid" alt="Phone image">
+            </div>
+            <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+                <form method="post">
+                    <h1 class="text-center mb-3">Sign Up</h1>
+                    
+                    <div class="form-outline mb-4">
+                        <input type="text" id="name" name="username" class="form-control form-control-lg" />
+                        <label class="form-label" for="name">Name</label>
+                    </div>
+                    
+                    <div class="form-outline mb-4">
+                        <input type="email" id="email" class="form-control form-control-lg" name="email" />
+                        <label class="form-label" for="email">Email</label>
+                    </div>
+                    
+                    <div class="form-outline mb-4">
+                        <input type="text" id="mobile" class="form-control form-control-lg" name="mobile"/>
+                        <label class="form-label" for="mobile">Mobile</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <input type="password" id="password" name="password" class="form-control form-control-lg" />
+                        <label class="form-label" for="password">Password</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <input type="password" id="cpassword" name="cpassword" class="form-control form-control-lg" />
+                        <label class="form-label" for="cpassword">Confirm Password</label>
+                    </div>
+
+                    <input type="submit" class="btn btn-primary btn-lg btn-block" value="Sign Up"/>
+
+                    <div class="divider d-flex align-items-center my-4">
+                        Already an user?&nbsp<a href="/login">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{>footer}}

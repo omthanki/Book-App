@@ -1,10 +1,14 @@
 require("dotenv").config()
 require("./db/conn")
 
+const { urlencoded } = require("express")
 const express = require('express')
 const hbs = require("hbs")
 const path = require("path")
 const app = express()
+
+app.use(express.json())
+app.use(urlencoded({extended:false}))
 
 app.set("view engine", "hbs")
 hbs.registerPartials(path.join(__dirname,"./partials"))

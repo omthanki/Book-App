@@ -22,6 +22,15 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-const userModel = mongoose.model("User", userSchema)
+const bookSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: true
+    }
+})
 
-module.exports = userModel
+const userModel = mongoose.model("User", userSchema)
+const bookModel = mongoose.model("Book", bookSchema)
+
+module.exports = {userModel, bookModel}

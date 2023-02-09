@@ -1,43 +1,58 @@
-const User = require("../models/model")
+const {userModel, bookModel} = require("../models/model")
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const auth = require('../auth/auth')
 
-module.exports.homePage = auth, (req, res) => {
-    res.render("index")
+module.exports.home = async (req, res) => {
+
+    try {
+
+        const data = await bookModel.find({})
+    
+        res.render("index", {data})
+        
+    } catch (error) {
+        console.log(error)
+    }
 }
 
-module.exports.getLogin = (req, res) => {
-    res.render("login")
+module.exports.Login = async(req, res) => {
+    if(req.method == "GET"){
+        res.render("login")
+    }
+    if(req.method == "POST"){
+        
+    try {
+        
+        const {email, password} = req.body
+
+        const data = await userModel.findOne({email})
+
+        const verifyPassword = await bcrypt.compare(password, data.password)
+
+        if(verifyPassword){
+
+            const token=jwt.sign({email:data.email}, process.env.SECRET_KEY)
+    
+            res.cookie("jwtcookie", token, {expiresIn: '24h', httpOnly: true})
+            console.log("cookie verified ")
+            res.render("index")
+        }
+        else{
+            res.send("Login Failed")
+        }
+
+    } catch (error) {
+        res.send("Login Failed")
+    }
+    }
 }
 
 module.exports.getRegister = (req, res) => {
     res.render("register")
 }
 
-module.exports.postLogin = async (req, res) => {
 
-    try {
-        
-        const {email, password} = req.body
-
-        const data = await User.findOne({email})
-
-        const verifyPassword = bcrypt.compare(password, data.password)
-
-        const token=jwt.sign({email:data.email}, process.env.SECRET_KEY)
-
-        res.cookie("jwtcookie", token, {expiresIn: '24h', httpOnly: true})
-
-        if(verifyPassword){
-            res.render("index")
-        }
-
-    } catch (error) {
-        console.log(error)
-    }
-
-}
 
 module.exports.postRegister = async (req, res) => {
 
@@ -55,7 +70,7 @@ module.exports.postRegister = async (req, res) => {
         const hash = await bcrypt.hash(password, 10)
 
         if (hash){
-            const data = new User({
+            const data = new userModel({
                 name: req.body.username,
                 email: req.body.email,
                 mobile: req.body.mobile,
@@ -65,7 +80,7 @@ module.exports.postRegister = async (req, res) => {
             const registered = await data.save()
 
             if(registered)
-                res.render("login")
+                res.redirect("/login")
         }
 
     } catch (error) {
@@ -74,10 +89,56 @@ module.exports.postRegister = async (req, res) => {
     }
 }
 
-module.exports.logout = (req, res) => {
+module.exports.logout = async (req, res) => {
 
-    res.clearCookie("jwtcookie")
-    res.render("login")
+    await res.clearCookie("jwtcookie")
+    res.redirect("/login")
+}
+
+module.exports.addBook = auth, (req, res) => {
+    res.render("addbook")
+}
+
+module.exports.postAddbook = async (req, res) => {
+
+    try {
+        
+        const data = new bookModel({
+            name: req.body.bookname
+        })
+
+        const added = await data.save()
+
+        if(added){
+            res.render("index")
+        }
+
+    } catch (error) {
+        res.send(error)
+    }
+
+}
+
+module.exports.deleteBook = async (req, res) => {
+
+    try {
+        
+        const _id = req.params.id
+
+        console.log(_id);
+
+        const isdeleted = await bookModel.deleteOne({_id: _id})
+
+        console.log(isdeleted);
+
+        if(isdeleted){
+            res.send("Deleted successfully")
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 module.exports.pagenotfound = (req, res) => {

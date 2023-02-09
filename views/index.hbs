@@ -2,4 +2,25 @@
 
 {{>nav}}
 
+<table class="table col-6 table-bordered mt-5 ml-5">
+    <tr>
+        <th>Name</th>
+        <th colspan="2">Actions</th>
+    </tr>
+
+    {{#each data}}
+
+    <tr>
+        <td>{{this.name}}</td>
+        <td><a href="editform?id={{this.id}}">Edit</a> </td>
+        <td><a href="delete/{{this.id}}">Delete</a> </td>
+
+    </tr>
+
+    {{else}}
+    <tr><td><p class="empty">No content</p></td></tr>
+</table>
+
+{{/each}}
+
 {{>footer}}
